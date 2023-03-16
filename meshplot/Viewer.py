@@ -461,7 +461,11 @@ class Viewer():
         diag = np.linalg.norm(ma-mi)
         mean = (ma - mi) / 2 + mi
         for r, obj in enumerate(self.__objects):
-            v = self.__objects[obj]["geometry"].attributes["position"].array
+            geometry = self.__objects[obj]["geometry"]
+            if isinstance(geometry, p3s.LineSegmentsGeometry):
+                v = geometry.positions
+            else:
+                v = geometry.attributes["position"].array
             v -= mean
 
         scale = self.__s["scale"] * (diag)
@@ -495,7 +499,11 @@ class Viewer():
 
         # Revert changes
         for r, obj in enumerate(self.__objects):
-            v = self.__objects[obj]["geometry"].attributes["position"].array
+            geometry = self.__objects[obj]["geometry"]
+            if isinstance(geometry, p3s.LineSegmentsGeometry):
+                v = geometry.positions
+            else:
+                v = geometry.attributes["position"].array
             v += mean
         self.__update_view()
 
